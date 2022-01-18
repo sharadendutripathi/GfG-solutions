@@ -1,0 +1,86 @@
+// { Driver Code Starts
+//Initial Template for Java
+
+import java.util.*;
+import java.io.*;
+import java.lang.*;
+
+class Sorting
+{
+    public static void main (String[] args) 
+    {
+        Scanner sc = new Scanner(System.in);
+        long t = sc.nextLong();
+        
+        while(t-- > 0)
+        {
+            long n = sc.nextLong();
+            long arr[] = new long[(int)n];
+            
+            for(long i = 0; i < n; i++)
+             arr[(int)i] = sc.nextLong();
+             
+            System.out.println(new Solution().inversionCount(arr, n));
+            
+        }
+    }
+}
+// } Driver Code Ends
+
+
+//User function Template for Java
+
+class Solution
+{
+    // arr[]: Input Array
+    // N : Size of the Array arr[]
+    //Function to count inversions in the array.
+    static long inversionCount(long arr[], long N)
+    {
+        int curr_size, l;
+        long res=0;
+        for(curr_size=1; curr_size<N;curr_size=2*curr_size){
+            for(l=-0;l<N;l=l+2*curr_size){
+                int mid=Math.min( l+curr_size-1,(int)N-1);
+                int r=Math.min(l+2*curr_size-1,(int)N-1);
+                res+=countAndMerge(arr,l,mid,r);
+            }
+        }
+        return res;
+        // Your Code Here
+    }
+    static long countAndMerge(long arr[], int l, int m,int r)
+    {
+        int n1=m-l+1, n2=r-m;
+        long[] left=new long[(int)n1],right=new long[(int)n2];
+        for(int i=0;i<n1;i++)
+            left[i]=arr[l+i];
+        for(int i=0;i<n2;i++)
+            right[i]=arr[m+i+1];
+        long res=0;
+        int i=0, j=0, k=l;
+        while(i<n1 && j<n2){
+            if(left[i]<=right[j]){
+                arr[k]=left[i];
+                i++;
+            }
+            else{
+                arr[k]=right[j];
+                j++;
+                res=res+(n1-i);
+            }
+            k++;
+        }
+        while(i<n1){
+            arr[k]=left[i];
+            i++;
+            k++;
+        }
+        while(j<n2){
+            arr[k]=right[j];
+            j++;
+            k++;
+        }
+        return res;
+    }
+}
